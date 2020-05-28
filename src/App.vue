@@ -1,17 +1,24 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png" />
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App" />
+    <ChatBot />
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import HelloWorld from "./components/HelloWorld.vue";
+import { BootstrapVue, IconsPlugin } from "bootstrap-vue";
+import ChatBot from "./components/ChatBot.vue";
+
+Vue.use(BootstrapVue);
+Vue.use(IconsPlugin);
+
+import "bootstrap/dist/css/bootstrap.css";
+import "bootstrap-vue/dist/bootstrap-vue.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 @Component({
   components: {
-    HelloWorld
+    ChatBot
   }
 })
 export default class App extends Vue {}
