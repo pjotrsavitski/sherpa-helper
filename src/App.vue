@@ -1,6 +1,11 @@
 <template>
   <div id="app">
     <ChatBot />
+    <div class="container">
+      <a href="https://sherpa4selfie.eu/" target="_blank">
+        <img alt="SHERPA4SELFIE logo" src="./assets/cropped-logo-large.jpg" class="mx-auto d-block img-fluid">
+      </a>
+    </div>
   </div>
 </template>
 

@@ -218,7 +218,7 @@ export default class ChatBot extends Vue {
   }
 
   .info {
-    background-color: rgba(255, 218, 0, 1);
+    background-color: #51b7bc;
     text-align: left;
 
     .header {
