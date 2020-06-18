@@ -3,10 +3,10 @@
     <div class="row">
       <div class="col-sm info">
         <div class="header my-4">
-          Hello! I am the SELFIE CHATBOT, how can I help you?
+          {{ $t("info.header") }}
         </div>
         <div class="mt-4">
-          <strong>Here are some most popular questions to start with:</strong>
+          <strong>{{ $t("info.popular_questions") }}</strong>
           <ul class="popular-questions pl-0">
             <li
               v-for="(question, index) in popularQuestions"
@@ -20,8 +20,12 @@
           </ul>
 
           <div @click="onMoreQuestions" class="more-questions mt-4">
-            See more common questions
+            {{ $t("info.see_more_questions") }}
           </div>
+        </div>
+
+        <div class="language-chooser-wrapper">
+          <language-chooser></language-chooser>
         </div>
       </div>
       <div class="col-sm chat px-0">
@@ -91,15 +95,21 @@
 import { Component, Vue } from "vue-property-decorator";
 import ChatBotService from "../services/chatbot";
 import urlRegex from "url-regex";
+import LanguageChooser from "./LanguageChooser.vue";
 
 const chatBotService = new ChatBotService();
 
-@Component
+@Component({
+  components: {
+    LanguageChooser
+  }
+})
 export default class ChatBot extends Vue {
   loading = false;
   question = "";
 
   mounted() {
+    // TODO Those should be loaded from an API
     this.$store.dispatch("setPopularQuestions", [
       "How do I register for SELFIE?",
       "How do I login?",
@@ -107,7 +117,12 @@ export default class ChatBot extends Vue {
       "How do I set SELFIE up for my school?",
       "How do I choose who will take part in SELFIE?"
     ]);
-    this.addToConversation("chatbot", "Hello! How can I help you?");
+    // TODO Consider showing this one all the time, making it possible to be
+    // translated when language is changed.
+    this.addToConversation(
+      "chatbot",
+      this.$t("conversation.greeting").toString()
+    );
   }
 
   public get conversation(): Array<{ type: string; text: string }>[] {
@@ -163,14 +178,16 @@ export default class ChatBot extends Vue {
           "chatbot",
           answer
             ? answer
-            : "I’m not able to find an answer to your question. Would you like to suggest this question to my database?"
+            : this.$t(
+                "conversation.answer_not_found_add_to_database"
+              ).toString()
         );
       })
       .catch(error => {
         this.loading = false;
         window.console.error(error);
         this.$bvToast.toast(error.message, {
-          title: "Error!",
+          title: this.$t("conversation.api_error_toast.title").toString(),
           variant: "danger"
         });
       })
@@ -238,6 +255,12 @@ export default class ChatBot extends Vue {
       text-decoration: underline;
       cursor: pointer;
     }
+
+    .language-chooser-wrapper {
+      position: absolute;
+      bottom: 0.5em;
+      right: 0.5em;
+    }
   }
 
   .chat {
@@ -279,3 +302,22 @@ export default class ChatBot extends Vue {
   }
 }
 </style>
+
+<i18n>
+{
+  "en": {
+    "info": {
+      "header": "Hello! I am the SELFIE CHATBOT, how can I help you?",
+      "popular_questions": "Here are some most popular questions to start with:",
+      "see_more_questions": "See more common questions"
+    },
+    "conversation": {
+      "greeting": "Hello! How can I help you?",
+      "answer_not_found_add_to_database": "I’m not able to find an answer to your question. Would you like to suggest this question to my database?",
+      "api_error_toast": {
+        "title": "Error!"
+      }
+    }
+  }
+}
+</i18n>
