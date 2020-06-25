@@ -223,6 +223,12 @@ export default class ChatBot extends Vue {
     let processed = value;
     processed = processed.replace(/\\n/g, "<br>");
     processed = processed.replace(urlRegex(), url => {
+      if (url.endsWith(',') || url.endsWith('.')) {
+        const ending = url.charAt(url.length - 1);
+        url = url.slice(0, -1);
+        return `<a href="${url}" target="_blank">${url}</a>${ending}`;
+      }
+
       return `<a href="${url}" target="_blank">${url}</a>`;
     });
 
