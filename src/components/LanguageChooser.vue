@@ -35,6 +35,7 @@ export default class LanguageChoser extends Vue {
 
   onChangeLocale(locale: string): void {
     this.$root.$i18n.locale = locale;
+    this.$root.$emit("localeChanged", locale);
   }
 }
 </script>
@@ -48,6 +49,15 @@ export default class LanguageChoser extends Vue {
       "fi": "Finnish",
       "gr": "Greek",
       "it": "Italian"
+    }
+  },
+  "et": {
+    "languages": {
+      "en": "Inglise",
+      "et": "Eesti",
+      "fi": "Soome",
+      "gr": "Kreeka",
+      "it": "Itaalia"
     }
   }
 }

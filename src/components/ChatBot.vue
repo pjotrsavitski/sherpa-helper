@@ -68,7 +68,7 @@
                 <b-input-group>
                   <b-form-input
                     v-model="question"
-                    placeholder="Type your question here"
+                    v-bind:placeholder="questionPlaceholder"
                     v-bind:disabled="loading"
                     size="lg"
                   ></b-form-input>
@@ -135,6 +135,10 @@ export default class ChatBot extends Vue {
 
   private get questionElement(): HTMLElement {
     return this.$refs.question as HTMLElement;
+  }
+
+  private get questionPlaceholder(): string {
+    return this.$t("conversation.question_placeholder").toString();
   }
 
   private addToConversation(type: string, text: string): void {
@@ -316,7 +320,23 @@ export default class ChatBot extends Vue {
       "answer_not_found_add_to_database": "I’m not able to find an answer to your question. Would you like to suggest this question to my database?",
       "api_error_toast": {
         "title": "Error!"
-      }
+      },
+      "question_placeholder": "Type your question here"
+    }
+  },
+  "et": {
+    "info": {
+      "header": "Tere! Olen SELFIE CHATBOT, kuidas saan abiks olla?",
+      "popular_questions": "Siin on mõned populaarsed küsimused:",
+      "see_more_questions": "Rohkem küsimusi"
+    },
+    "conversation": {
+      "greeting": "Tere! Kuidas saan abiks olla?",
+      "answer_not_found_add_to_database": "Ma polnud suuteline su küsimusele vastust leida. Kas tahaksid seda minu andmebaasi lisada?",
+      "api_error_toast": {
+        "title": "Viga!"
+      },
+      "question_placeholder": "Trüki oma küsimus siia"
     }
   }
 }

@@ -30,7 +30,25 @@ import "@fortawesome/fontawesome-free/css/all.css";
     ChatBot
   }
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  created() {
+    try {
+      if (window.localStorage.currentLocale) {
+        this.$root.$i18n.locale = window.localStorage.currentLocale;
+      }
+    } catch (e) {
+      window.console.error(e);
+    }
+
+    this.$root.$on("localeChanged", (locale: string) => {
+      try {
+        window.localStorage.currentLocale = locale;
+      } catch (e) {
+        window.console.error(e);
+      }
+    });
+  }
+}
 </script>
 
 <style lang="scss">
