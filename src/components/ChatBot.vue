@@ -25,7 +25,7 @@
         </div>
 
         <div class="language-chooser-wrapper">
-          <language-chooser></language-chooser>
+          <language-chooser :locales="locales"></language-chooser>
         </div>
       </div>
       <div class="col-sm chat px-0">
@@ -102,6 +102,12 @@ const chatBotService = new ChatBotService();
 @Component({
   components: {
     LanguageChooser
+  },
+  props: {
+    locales: {
+      type: Array,
+      required: true
+    }
   }
 })
 export default class ChatBot extends Vue {

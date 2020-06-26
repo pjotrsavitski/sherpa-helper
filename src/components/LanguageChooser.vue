@@ -22,12 +22,15 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-@Component
-export default class LanguageChoser extends Vue {
-  public get locales(): Array<string> {
-    return ["en", "et", "fi", "gr", "it"];
+@Component({
+  props: {
+    locales: {
+      type: Array,
+      required: true
+    }
   }
-
+})
+export default class LanguageChoser extends Vue {
   public get language(): string {
     const locale = this.$i18n.locale;
     return this.$t(`languages.${locale}`).toString();

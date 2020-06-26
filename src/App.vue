@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ChatBot />
+    <ChatBot :locales="locales" />
     <div class="container">
       <a href="https://sherpa4selfie.eu/" target="_blank">
         <img
@@ -31,13 +31,33 @@ import "@fortawesome/fontawesome-free/css/all.css";
   }
 })
 export default class App extends Vue {
+  locales = ["en", "et", "fi", "gr", "it"];
+
   created() {
+    let localeSet = false;
     try {
       if (window.localStorage.currentLocale) {
         this.$root.$i18n.locale = window.localStorage.currentLocale;
+        localeSet = true;
       }
     } catch (e) {
       window.console.error(e);
+    }
+
+    if (!localeSet) {
+      let languages = window.navigator.languages.map(language => {
+        language = language.toLowerCase();
+
+        return language.includes("-") ? language.split("-", 1)[0] : language;
+      });
+      languages = [...new Set(languages)];
+      const intersection = languages.filter(language =>
+        this.locales.includes(language)
+      );
+
+      if (intersection.length > 0) {
+        this.$root.$i18n.locale = intersection[0];
+      }
     }
 
     this.$root.$on("localeChanged", (locale: string) => {
