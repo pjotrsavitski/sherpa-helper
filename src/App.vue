@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <ChatBot :locales="locales" />
+    <chat-bot :locales="locales" />
     <div class="container">
       <a href="https://sherpa4selfie.eu/" target="_blank">
         <img

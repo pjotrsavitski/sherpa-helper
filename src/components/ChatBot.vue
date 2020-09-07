@@ -30,36 +30,12 @@
       </div>
       <div class="col-sm chat px-0">
         <div class="conversation p-2 px-4 mt-4">
-          <div
+          <conversation-item
             v-for="(item, index) in conversation"
             v-bind:key="index"
-            v-bind:class="{
-              user: item.type === 'user',
-              chatbot: item.type === 'chatbot',
-              'my-2 row': true
-            }"
-          >
-            <div class="col">
-              <i
-                class="fas fa-robot fa-2x"
-                v-if="item.type === 'chatbot'"
-                v-b-tooltip.hover
-                v-bind:title="item.timestamp.toLocaleString()"
-              ></i>
-            </div>
-            <div class="col-8">
-              <span class="text" v-html="htmlifyText(item.text)"></span>
-            </div>
-            <div class="col">
-              <i
-                class="fas fa-user-circle fa-2x"
-                v-if="item.type === 'user'"
-                v-b-tooltip.hover
-                v-bind:title="item.timestamp.toLocaleString()"
-              ></i>
-            </div>
-          </div>
-          <i class="fas fa-spinner fa-pulse fa-2x" v-if="loading"></i>
+            :item="item"
+          ></conversation-item>
+          <b-spinner label="Loading..." type="grow" variant="secondary" small v-if="loading"></b-spinner>
         </div>
         <div class="container position-absolute question" ref="question">
           <div class="row">
@@ -71,6 +47,7 @@
                     v-bind:placeholder="$t('conversation.question_placeholder')"
                     v-bind:disabled="loading"
                     size="lg"
+                    trim
                   ></b-form-input>
                   <b-input-group-append>
                     <b-button
@@ -93,14 +70,13 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import ChatBotService from "../services/chatbot";
-import urlRegex from "url-regex";
+import { chatBotService } from "../services/chatbot";
+import ConversationItem from "./ConversationItem.vue";
 import LanguageChooser from "./LanguageChooser.vue";
-
-const chatBotService = new ChatBotService();
 
 @Component({
   components: {
+    ConversationItem,
     LanguageChooser
   },
   props: {
@@ -154,11 +130,11 @@ export default class ChatBot extends Vue {
   onSubmitQuestion(evt: Event): void {
     evt.preventDefault();
 
-    if (this.question.trim().length <= 0) {
+    if (this.question.length <= 0) {
       return;
     }
 
-    this.askQuestion(this.question.trim()).then(() => {
+    this.askQuestion(this.question).then(() => {
       this.question = "";
     });
   }
@@ -193,6 +169,7 @@ export default class ChatBot extends Vue {
         this.loading = false;
         window.console.error(error);
         this.$bvToast.toast(error.message, {
+          toaster: "b-toaster-bottom-left",
           title: this.$t("conversation.api_error_toast.title").toString(),
           variant: "danger"
         });
@@ -216,25 +193,10 @@ export default class ChatBot extends Vue {
 
   onMoreQuestions(): void {
     this.$bvToast.toast("This feature has not been implemented yet!", {
+      toaster: "b-toaster-bottom-left",
       title: "NB!",
       variant: "warning"
     });
-  }
-
-  htmlifyText(value: string): string {
-    let processed = value;
-    processed = processed.replace(/\\n/g, "<br>");
-    processed = processed.replace(urlRegex(), url => {
-      if (url.endsWith(",") || url.endsWith(".")) {
-        const ending = url.charAt(url.length - 1);
-        url = url.slice(0, -1);
-        return `<a href="${url}" target="_blank">${url}</a>${ending}`;
-      }
-
-      return `<a href="${url}" target="_blank">${url}</a>`;
-    });
-
-    return processed;
   }
 }
 </script>
@@ -280,32 +242,6 @@ export default class ChatBot extends Vue {
 
     .conversation {
       margin-bottom: 5em;
-
-      .chatbot {
-        text-align: left;
-      }
-
-      .user {
-        text-align: right;
-
-        .text {
-          background-color: rgba(64, 75, 182, 1);
-          color: #fff;
-          border-radius: 1em;
-          padding: 0.5em;
-          border-bottom-right-radius: 0;
-          display: inline-block;
-          word-wrap: break-word;
-        }
-      }
-
-      .fa-robot {
-        color: #8cc152;
-      }
-
-      .fa-user-circle {
-        color: #d770ad;
-      }
     }
 
     .container.question {

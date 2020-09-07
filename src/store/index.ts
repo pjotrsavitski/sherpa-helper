@@ -3,7 +3,7 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
-interface ConversationEntry {
+export interface ConversationEntry {
   type: string;
   text: string;
   timestamp: Date;
