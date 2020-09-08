@@ -9,12 +9,13 @@ export default class KnowledgeBaseService {
     });
   }
 
-  postSuggestion(question: string, language: string) {
+  postSuggestion(question: string, language: string, token: string) {
     return this.http.post(
       "/api/question",
       {
         question: question,
-        language: language
+        language: language,
+        token: token
       },
       {
         headers: {

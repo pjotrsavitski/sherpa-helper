@@ -72,6 +72,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import urlRegex from "url-regex";
 import { ConversationEntry } from "../store";
 import { knowledgeBaseService } from "../services/kb";
+import { recaptchaService } from "../services/recaptcha";
 
 @Component
 export default class ConversationItem extends Vue {
@@ -81,6 +82,11 @@ export default class ConversationItem extends Vue {
 
   @Prop({ required: true })
   item!: ConversationEntry;
+
+  mounted() {
+    // TODO See if this is the best solution or could be improved upon
+    recaptchaService.load();
+  }
 
   get localDate(): string {
     return this.item.timestamp.toLocaleString();
@@ -114,25 +120,27 @@ export default class ConversationItem extends Vue {
     return processed;
   }
 
-  makeSuggestion(suggestion: string): Promise<void> {
+  makeSuggestion(suggestion: string): void {
     this.loading = true;
 
-    return knowledgeBaseService
-      .postSuggestion(suggestion, this.$i18n.locale)
-      .then(response => {
-        this.loading = false;
-        this.disableSuggestion = true;
-        this.congratulate = true;
-      })
-      .catch(error => {
-        this.loading = false;
-        window.console.error(error);
-        this.$bvToast.toast(error.message, {
-          toaster: "b-toaster-bottom-left",
-          title: this.$t("conversation.api_error_toast.title").toString(),
-          variant: "danger"
+    recaptchaService.execute("suggest").then(token => {
+      knowledgeBaseService
+        .postSuggestion(suggestion, this.$i18n.locale, token)
+        .then(() => {
+          this.loading = false;
+          this.disableSuggestion = true;
+          this.congratulate = true;
+        })
+        .catch(error => {
+          this.loading = false;
+          window.console.error(error);
+          this.$bvToast.toast(error.message, {
+            toaster: "b-toaster-bottom-left",
+            title: this.$t("conversation.api_error_toast.title").toString(),
+            variant: "danger"
+          });
         });
-      });
+    });
   }
 
   onYes(): void {
@@ -182,6 +190,12 @@ export default class ConversationItem extends Vue {
     "suggestion": {
       "text": "I’m not able to find an answer to your question. Would you like to suggest this question to my database?",
       "congrats": "Great! Do you have any further questions?"
+    }
+  },
+  "et": {
+    "suggestion": {
+      "text": "Ma polnud suuteline su küsimusele vastust leida. Kas tahaksid seda minu andmebaasi lisada?",
+      "congrats": "Tore! Kas sul oleks veel küsimusi?"
     }
   }
 }

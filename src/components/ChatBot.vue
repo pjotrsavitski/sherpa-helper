@@ -1,7 +1,7 @@
 <template>
   <div class="container main my-4">
     <div class="row">
-      <div class="col-sm info">
+      <div class="col-sm info p-4">
         <div class="header my-4">
           {{ $t("info.header") }}
         </div>
@@ -35,7 +35,13 @@
             v-bind:key="index"
             :item="item"
           ></conversation-item>
-          <b-spinner label="Loading..." type="grow" variant="secondary" small v-if="loading"></b-spinner>
+          <b-spinner
+            label="Loading..."
+            type="grow"
+            variant="secondary"
+            small
+            v-if="loading"
+          ></b-spinner>
         </div>
         <div class="container position-absolute question" ref="question">
           <div class="row">
@@ -156,14 +162,11 @@ export default class ChatBot extends Vue {
         this.loading = false;
         const answer = this.extractChatBotAnswer(response.data);
 
-        this.addToConversation(
-          "chatbot",
-          answer
-            ? answer
-            : this.$t(
-                "conversation.answer_not_found_add_to_database"
-              ).toString()
-        );
+        if (answer) {
+          this.addToConversation("chatbot", answer);
+        } else {
+          this.addToConversation("suggestion", question);
+        }
       })
       .catch(error => {
         this.loading = false;
@@ -176,7 +179,10 @@ export default class ChatBot extends Vue {
       })
       .then(() => {
         Vue.nextTick(() => {
-          this.questionElement.scrollIntoView(false);
+          this.questionElement.scrollIntoView({
+            behavior: "smooth",
+            block: "end"
+          });
         });
       });
   }
@@ -209,8 +215,11 @@ export default class ChatBot extends Vue {
   }
 
   .info {
-    background-color: #51b7bc;
+    background-color: rgb(80, 181, 187);
     text-align: left;
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    font-size: 125%;
 
     .header {
       font-size: 150%;
@@ -261,7 +270,6 @@ export default class ChatBot extends Vue {
     },
     "conversation": {
       "greeting": "Hello! How can I help you?",
-      "answer_not_found_add_to_database": "I’m not able to find an answer to your question. Would you like to suggest this question to my database?",
       "api_error_toast": {
         "title": "Error!"
       },
@@ -276,7 +284,6 @@ export default class ChatBot extends Vue {
     },
     "conversation": {
       "greeting": "Tere! Kuidas saan abiks olla?",
-      "answer_not_found_add_to_database": "Ma polnud suuteline su küsimusele vastust leida. Kas tahaksid seda minu andmebaasi lisada?",
       "api_error_toast": {
         "title": "Viga!"
       },
