@@ -105,12 +105,7 @@ export default class ChatBot extends Vue {
       "How do I set SELFIE up for my school?",
       "How do I choose who will take part in SELFIE?"
     ]);
-    // TODO Consider showing this one all the time, making it possible to be
-    // translated when language is changed.
-    this.addToConversation(
-      "chatbot",
-      this.$t("conversation.greeting").toString()
-    );
+    this.addToConversation("greeting", "");
   }
 
   public get conversation(): Array<{ type: string; text: string }>[] {
@@ -173,7 +168,7 @@ export default class ChatBot extends Vue {
         window.console.error(error);
         this.$bvToast.toast(error.message, {
           toaster: "b-toaster-bottom-left",
-          title: this.$t("conversation.api_error_toast.title").toString(),
+          title: this.$t("toast.error.title").toString(),
           variant: "danger"
         });
       })
@@ -264,15 +259,11 @@ export default class ChatBot extends Vue {
 {
   "en": {
     "info": {
-      "header": "Hello! I am the SELFIE CHATBOT, how can I help you?",
-      "popular_questions": "Here are some most popular questions to start with:",
+      "header": "Hello! I'm the SELFIE CHATBOT. How can I help you?",
+      "popular_questions": "To start with, here are some of the most popular questions:",
       "see_more_questions": "See more common questions"
     },
     "conversation": {
-      "greeting": "Hello! How can I help you?",
-      "api_error_toast": {
-        "title": "Error!"
-      },
       "question_placeholder": "Type your question here"
     }
   },
@@ -283,11 +274,27 @@ export default class ChatBot extends Vue {
       "see_more_questions": "Rohkem küsimusi"
     },
     "conversation": {
-      "greeting": "Tere! Kuidas saan abiks olla?",
-      "api_error_toast": {
-        "title": "Viga!"
-      },
       "question_placeholder": "Trüki oma küsimus siia"
+    }
+  },
+  "fi": {
+    "info": {
+      "header": "Hei, Olen SELFIE chatbot, kuinka voin auttaa sinua ?",
+      "popular_questions": "Tässä joitakin yleisimpiä kysymyksiä ?",
+      "see_more_questions": "Haluatko nähdä lisää yleisiä kysymyksiä ?"
+    },
+    "conversation": {
+      "question_placeholder": "Kirjoita kysymyksesi tähän"
+    }
+  },
+  "it": {
+    "info": {
+      "header": "Ciao. Sono il Chatbot di SELFIE. Come posso aiutarti?",
+      "popular_questions": "Per cominciare, ecco alcune domande comuni:",
+      "see_more_questions": "Visualizza altre domande comuni."
+    },
+    "conversation": {
+      "question_placeholder": "Inserire qui la tua domanda."
     }
   }
 }

@@ -62,6 +62,24 @@ export default class LanguageChoser extends Vue {
       "gr": "Kreeka",
       "it": "Itaalia"
     }
+  },
+  "fi": {
+    "languages": {
+      "en": "Englanti",
+      "et": "Eesti",
+      "fi": "Suomi",
+      "gr": "Kreikka",
+      "it": "Italia"
+    }
+  },
+  "it": {
+    "languages": {
+      "en": "Inglese",
+      "et": "Estone",
+      "fi": "Finlandese",
+      "gr": "Greco",
+      "it": "Italiano"
+    }
   }
 }
 </i18n>

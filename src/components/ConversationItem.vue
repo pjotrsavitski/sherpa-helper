@@ -15,10 +15,13 @@
       ></i>
     </div>
     <div class="col-8">
+      <span class="text" v-if="isGreeting()">
+        {{ $t("greeting") }}
+      </span>
       <span
         class="text"
         v-html="htmlifyText(item.text)"
-        v-if="!isSuggestion()"
+        v-if="!(isSuggestion() || isGreeting())"
       ></span>
       <div v-if="isSuggestion()">
         <span class="text">
@@ -93,7 +96,7 @@ export default class ConversationItem extends Vue {
   }
 
   isChatBot(): boolean {
-    return this.item.type === "chatbot" || this.item.type === "suggestion";
+    return ["chatbot", "suggestion", "greeting"].includes(this.item.type);
   }
 
   isUser(): boolean {
@@ -102,6 +105,10 @@ export default class ConversationItem extends Vue {
 
   isSuggestion(): boolean {
     return this.item.type === "suggestion";
+  }
+
+  isGreeting(): boolean {
+    return this.item.type === "greeting";
   }
 
   htmlifyText(value: string): string {
@@ -136,7 +143,7 @@ export default class ConversationItem extends Vue {
           window.console.error(error);
           this.$bvToast.toast(error.message, {
             toaster: "b-toaster-bottom-left",
-            title: this.$t("conversation.api_error_toast.title").toString(),
+            title: this.$t("toast.error.title").toString(),
             variant: "danger"
           });
         });
@@ -187,15 +194,31 @@ export default class ConversationItem extends Vue {
 <i18n>
 {
   "en": {
+    "greeting": "Hello! How can I help you?",
     "suggestion": {
-      "text": "I’m not able to find an answer to your question. Would you like to suggest this question to my database?",
+      "text": "I’m unable to find an answer to your question. Would you like to suggest this question to my database?",
       "congrats": "Great! Do you have any further questions?"
     }
   },
   "et": {
+    "greeting": "Tere! Kuidas saan abiks olla?",
     "suggestion": {
-      "text": "Ma polnud suuteline su küsimusele vastust leida. Kas tahaksid seda minu andmebaasi lisada?",
-      "congrats": "Tore! Kas sul oleks veel küsimusi?"
+      "text": "Ma ei leia kahjuks vastust Sinu küsimusele. Kas Sa sooviksid selle küsimuse andmebaasi lisada?",
+      "congrats": "Tore! Kas Sul on veel küsimusi?"
+    }
+  },
+  "fi": {
+    "greeting": "Hei! Kuinka voin auttaa ?",
+    "suggestion": {
+      "text": "En valitettavasti löydä vastausta kysymykseesi. Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
+      "congrats": "Hienoa!, Onko sinulla lisää kysymyksiä ?"
+    }
+  },
+  "it": {
+    "greeting": "Ciao! Come posso auitarti?",
+    "suggestion": {
+      "text": "Non trovo una risposta alla tua domanda. Vuoi che questa domanda venga sottoposta alla mia banca dati?",
+      "congrats": "Grande! Hai altre domande?"
     }
   }
 }
