@@ -152,13 +152,12 @@ export default class ChatBot extends Vue {
     this.addToConversation("user", question);
 
     return chatBotService
-      .getAnswer(question)
+      .getAnswer(question, this.$i18n.locale)
       .then(response => {
         this.loading = false;
-        const answer = this.extractChatBotAnswer(response.data);
 
-        if (answer) {
-          this.addToConversation("chatbot", answer);
+        if (response.data && response.data.length > 0) {
+          this.addToConversation("chatbot", response.data[0]);
         } else {
           this.addToConversation("suggestion", question);
         }
@@ -180,16 +179,6 @@ export default class ChatBot extends Vue {
           });
         });
       });
-  }
-
-  extractChatBotAnswer(responses: [string, string, number][]): string | null {
-    if (!(responses.length > 0)) return null;
-
-    if (responses.length === 1) return responses[0][1];
-
-    return responses.sort((a, b) => {
-      return b[2] - a[2];
-    })[0][1];
   }
 
   onMoreQuestions(): void {

@@ -9,11 +9,12 @@ export default class ChatBotService {
     });
   }
 
-  getAnswer(question: string) {
+  getAnswer(question: string, languageCode: string) {
     return this.http.post(
-      "sherpa.php",
+      "/chatterbot/applyQuestion",
       {
-        question: question
+        text: question,
+        languageCode: languageCode
       },
       {
         headers: {
@@ -27,5 +28,5 @@ export default class ChatBotService {
 
 // A singleton instance
 export const chatBotService = new ChatBotService(
-  "https://chatbot.smartzoos.eu"
+  "http://83.212.93.155:5000"
 );
