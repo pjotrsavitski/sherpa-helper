@@ -7,6 +7,7 @@ export interface ConversationEntry {
   type: string;
   text: string;
   timestamp: Date;
+  locale: string;
 }
 
 export default new Vuex.Store({

@@ -27,6 +27,4 @@ export default class ChatBotService {
 }
 
 // A singleton instance
-export const chatBotService = new ChatBotService(
-  "http://83.212.93.155:5000"
-);
+export const chatBotService = new ChatBotService("http://83.212.93.155:5000");

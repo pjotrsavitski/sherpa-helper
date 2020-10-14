@@ -24,6 +24,38 @@
         v-if="!(isSuggestion() || isGreeting())"
       ></span>
       <div v-if="isSuggestion()">
+        <div v-if="!isInEnglish()">
+          <span class="text">
+            {{ $t("suggestion.english") }}
+          </span>
+          <div class="my-2 text-center">
+            <b-button-group>
+              <b-button
+                size="sm"
+                variant="outline-secondary"
+                :disabled="loading || disableSubmitInEnglish"
+                @click="onEnglishYes"
+              >
+                <b-spinner
+                  label="Loading..."
+                  type="grow"
+                  variant="secondary"
+                  small
+                  v-if="loading"
+                ></b-spinner>
+                Yes
+              </b-button>
+              <b-button
+                size="sm"
+                variant="outline-secondary"
+                :disabled="loading || disableSubmitInEnglish"
+                @click="onEnglishNo"
+              >
+                No
+              </b-button>
+            </b-button-group>
+          </div>
+        </div>
         <span class="text">
           {{ $t("suggestion.text") }}
         </span>
@@ -82,6 +114,7 @@ export default class ConversationItem extends Vue {
   loading = false;
   disableSuggestion = false;
   congratulate = false;
+  disableSubmitInEnglish = false;
 
   @Prop({ required: true })
   item!: ConversationEntry;
@@ -109,6 +142,10 @@ export default class ConversationItem extends Vue {
 
   isGreeting(): boolean {
     return this.item.type === "greeting";
+  }
+
+  isInEnglish(): boolean {
+    return this.item.locale === "en";
   }
 
   htmlifyText(value: string): string {
@@ -157,6 +194,16 @@ export default class ConversationItem extends Vue {
   onNo(): void {
     this.disableSuggestion = true;
   }
+
+  onEnglishYes(): void {
+    this.$root.$i18n.locale = "en";
+    this.$root.$emit("resubmitQuestionInEnglish", this.item.text);
+    this.disableSubmitInEnglish = true;
+  }
+
+  onEnglishNo(): void {
+    this.disableSubmitInEnglish = true;
+  }
 }
 </script>
 
@@ -197,7 +244,8 @@ export default class ConversationItem extends Vue {
     "greeting": "Hello! How can I help you?",
     "suggestion": {
       "text": "I’m unable to find an answer to your question. Would you like to suggest this question to my database?",
-      "congrats": "Great! Do you have any further questions?"
+      "congrats": "Great! Do you have any further questions?",
+      "english": "There is no answer defined for your question! Would you like to submit your question again in English?"
     }
   },
   "et": {

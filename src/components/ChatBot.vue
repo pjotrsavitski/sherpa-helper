@@ -96,6 +96,13 @@ export default class ChatBot extends Vue {
   loading = false;
   question = "";
 
+  created() {
+    this.$root.$on("resubmitQuestionInEnglish", (question: string) => {
+      this.question = question;
+      this.scrollQuestionElementIntoView();
+    });
+  }
+
   mounted() {
     // TODO Those should be loaded from an API
     this.$store.dispatch("setPopularQuestions", [
@@ -124,7 +131,8 @@ export default class ChatBot extends Vue {
     this.$store.dispatch("addToConversation", {
       type: type,
       text: text,
-      timestamp: new Date()
+      timestamp: new Date(),
+      locale: this.$i18n.locale
     });
   }
 
@@ -172,12 +180,7 @@ export default class ChatBot extends Vue {
         });
       })
       .then(() => {
-        Vue.nextTick(() => {
-          this.questionElement.scrollIntoView({
-            behavior: "smooth",
-            block: "end"
-          });
-        });
+        this.scrollQuestionElementIntoView();
       });
   }
 
@@ -186,6 +189,15 @@ export default class ChatBot extends Vue {
       toaster: "b-toaster-bottom-left",
       title: "NB!",
       variant: "warning"
+    });
+  }
+
+  scrollQuestionElementIntoView(): void {
+    Vue.nextTick(() => {
+      this.questionElement.scrollIntoView({
+        behavior: "smooth",
+        block: "end"
+      });
     });
   }
 }
