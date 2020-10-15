@@ -24,17 +24,48 @@
         v-if="!(isSuggestion() || isGreeting())"
       ></span>
       <div v-if="isSuggestion()">
-        <div v-if="!isInEnglish()">
+        <div v-if="!isInEnglish">
           <span class="text">
-            {{ $t("suggestion.english") }}
+            {{ $t("suggestion.ask_in_english") }}
           </span>
           <div class="my-2 text-center">
             <b-button-group>
               <b-button
                 size="sm"
-                variant="outline-secondary"
+                :variant="submitInEnglishVariantYes"
                 :disabled="loading || disableSubmitInEnglish"
                 @click="onEnglishYes"
+              >
+                {{ $t("suggestion.buttons.yes") }}
+              </b-button>
+              <b-button
+                size="sm"
+                :variant="submitInEnglishVariantNo"
+                :disabled="loading || disableSubmitInEnglish"
+                @click="onEnglishNo"
+              >
+                {{ $t("suggestion.buttons.no") }}
+              </b-button>
+            </b-button-group>
+          </div>
+        </div>
+        <div v-if="showSuggestQuestion()">
+          <span class="text">
+            {{
+              $t(
+                isInEnglish
+                  ? "suggestion.text_for_english"
+                  : "suggestion.text_not_for_english"
+              )
+            }}
+          </span>
+          <div class="my-2 text-center">
+            <b-button-group>
+              <b-button
+                size="sm"
+                :variant="submitSuggestionVariantYes"
+                :disabled="loading || disableSuggestion"
+                @click="onYes"
               >
                 <b-spinner
                   label="Loading..."
@@ -43,48 +74,18 @@
                   small
                   v-if="loading"
                 ></b-spinner>
-                Yes
+                {{ $t("suggestion.buttons.yes") }}
               </b-button>
               <b-button
                 size="sm"
-                variant="outline-secondary"
-                :disabled="loading || disableSubmitInEnglish"
-                @click="onEnglishNo"
+                :variant="submitSuggestionVariantNo"
+                :disabled="loading || disableSuggestion"
+                @click="onNo"
               >
-                No
+                {{ $t("suggestion.buttons.no") }}
               </b-button>
             </b-button-group>
           </div>
-        </div>
-        <span class="text">
-          {{ $t("suggestion.text") }}
-        </span>
-        <div class="my-2 text-center">
-          <b-button-group>
-            <b-button
-              size="sm"
-              variant="outline-secondary"
-              :disabled="loading || disableSuggestion"
-              @click="onYes"
-            >
-              <b-spinner
-                label="Loading..."
-                type="grow"
-                variant="secondary"
-                small
-                v-if="loading"
-              ></b-spinner>
-              Yes
-            </b-button>
-            <b-button
-              size="sm"
-              variant="outline-secondary"
-              :disabled="loading || disableSuggestion"
-              @click="onNo"
-            >
-              No
-            </b-button>
-          </b-button-group>
         </div>
         <span class="text" v-if="congratulate">
           {{ $t("suggestion.congrats") }}
@@ -112,9 +113,9 @@ import { recaptchaService } from "../services/recaptcha";
 @Component
 export default class ConversationItem extends Vue {
   loading = false;
-  disableSuggestion = false;
+  submitSuggestionChoice = "";
   congratulate = false;
-  disableSubmitInEnglish = false;
+  submitInEnglishChoice = "";
 
   @Prop({ required: true })
   item!: ConversationEntry;
@@ -126,6 +127,62 @@ export default class ConversationItem extends Vue {
 
   get localDate(): string {
     return this.item.timestamp.toLocaleString();
+  }
+
+  get disableSuggestion(): boolean {
+    return this.submitSuggestionChoice !== "";
+  }
+
+  get isInEnglish(): boolean {
+    return this.item.locale === "en";
+  }
+
+  get disableSubmitInEnglish(): boolean {
+    return this.submitInEnglishChoice !== "";
+  }
+
+  get submitSuggestionVariantYes(): string {
+    return this.determineVariant(
+      this.disableSuggestion,
+      this.submitSuggestionChoice,
+      "yes"
+    );
+  }
+
+  get submitSuggestionVariantNo(): string {
+    return this.determineVariant(
+      this.disableSuggestion,
+      this.submitSuggestionChoice,
+      "no"
+    );
+  }
+
+  get submitInEnglishVariantYes(): string {
+    return this.determineVariant(
+      this.disableSubmitInEnglish,
+      this.submitInEnglishChoice,
+      "yes"
+    );
+  }
+
+  get submitInEnglishVariantNo(): string {
+    return this.determineVariant(
+      this.disableSubmitInEnglish,
+      this.submitInEnglishChoice,
+      "no"
+    );
+  }
+
+  determineVariant(
+    disabled: boolean,
+    choice: string,
+    expected: string
+  ): string {
+    if (disabled && choice === expected) {
+      return "secondary";
+    }
+
+    return "outline-secondary";
   }
 
   isChatBot(): boolean {
@@ -144,8 +201,8 @@ export default class ConversationItem extends Vue {
     return this.item.type === "greeting";
   }
 
-  isInEnglish(): boolean {
-    return this.item.locale === "en";
+  showSuggestQuestion(): boolean {
+    return this.isInEnglish || this.submitInEnglishChoice === "no";
   }
 
   htmlifyText(value: string): string {
@@ -172,7 +229,7 @@ export default class ConversationItem extends Vue {
         .postSuggestion(suggestion, this.$i18n.locale, token)
         .then(() => {
           this.loading = false;
-          this.disableSuggestion = true;
+          this.submitSuggestionChoice = "yes";
           this.congratulate = true;
         })
         .catch(error => {
@@ -192,17 +249,17 @@ export default class ConversationItem extends Vue {
   }
 
   onNo(): void {
-    this.disableSuggestion = true;
+    this.submitSuggestionChoice = "no";
   }
 
   onEnglishYes(): void {
     this.$root.$i18n.locale = "en";
-    this.$root.$emit("resubmitQuestionInEnglish", this.item.text);
-    this.disableSubmitInEnglish = true;
+    this.$root.$emit("resubmitQuestionInEnglish");
+    this.submitInEnglishChoice = "yes";
   }
 
   onEnglishNo(): void {
-    this.disableSubmitInEnglish = true;
+    this.submitInEnglishChoice = "no";
   }
 }
 </script>
@@ -243,30 +300,53 @@ export default class ConversationItem extends Vue {
   "en": {
     "greeting": "Hello! How can I help you?",
     "suggestion": {
-      "text": "I’m unable to find an answer to your question. Would you like to suggest this question to my database?",
+      "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
+      "text_for_english": "I’m unable to find an answer to your question. Would you like to suggest this question to my database?",
+      "text_not_for_english": "Would you like to suggest this question to my database?",
       "congrats": "Great! Do you have any further questions?",
-      "english": "There is no answer defined for your question! Would you like to submit your question again in English?"
+      "buttons": {
+        "yes": "Yes",
+        "no": "No"
+      }
     }
   },
   "et": {
     "greeting": "Tere! Kuidas saan abiks olla?",
     "suggestion": {
-      "text": "Ma ei leia kahjuks vastust Sinu küsimusele. Kas Sa sooviksid selle küsimuse andmebaasi lisada?",
-      "congrats": "Tore! Kas Sul on veel küsimusi?"
+      "ask_in_english": "Ma ei leia kahjuks vastust Sinu küsimusele. Kas sa sooviksid selle küsimuse Inglise keeles esitada?",
+      "text_for_english": "Ma ei leia kahjuks vastust Sinu küsimusele. Kas Sa sooviksid selle küsimuse andmebaasi lisada",
+      "text_not_for_english": "Kas Sa sooviksid selle küsimuse andmebaasi lisada",
+      "congrats": "Tore! Kas Sul on veel küsimusi?",
+      "buttons": {
+        "yes": "Jah",
+        "no": "Ei"
+      }
     }
   },
   "fi": {
     "greeting": "Hei! Kuinka voin auttaa ?",
     "suggestion": {
-      "text": "En valitettavasti löydä vastausta kysymykseesi. Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
-      "congrats": "Hienoa!, Onko sinulla lisää kysymyksiä ?"
+      "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
+      "text_for_english": "En valitettavasti löydä vastausta kysymykseesi. Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
+      "text_not_for_english": "Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
+      "congrats": "Hienoa!, Onko sinulla lisää kysymyksiä ?",
+      "buttons": {
+        "yes": "Joo",
+        "no": "Ei"
+      }
     }
   },
   "it": {
     "greeting": "Ciao! Come posso auitarti?",
     "suggestion": {
-      "text": "Non trovo una risposta alla tua domanda. Vuoi che questa domanda venga sottoposta alla mia banca dati?",
-      "congrats": "Grande! Hai altre domande?"
+      "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
+      "text_for_english": "Non trovo una risposta alla tua domanda. Vuoi che questa domanda venga sottoposta alla mia banca dati?",
+      "text_not_for_english": "Vuoi che questa domanda venga sottoposta alla mia banca dati?",
+      "congrats": "Grande! Hai altre domande?",
+      "buttons": {
+        "yes": "Sì",
+        "no": "No"
+      }
     }
   }
 }

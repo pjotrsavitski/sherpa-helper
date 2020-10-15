@@ -97,8 +97,7 @@ export default class ChatBot extends Vue {
   question = "";
 
   created() {
-    this.$root.$on("resubmitQuestionInEnglish", (question: string) => {
-      this.question = question;
+    this.$root.$on("resubmitQuestionInEnglish", () => {
       this.scrollQuestionElementIntoView();
     });
   }
