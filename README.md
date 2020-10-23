@@ -1,6 +1,16 @@
-# sherpa
+# SHERPA Helper
 
-## Project setup
+## Installation and development
+
+Checkout suitable branch. Though `master` branch is used for development, it should still be stable enough to use in production. Change the `.env` file and provide configurations for [reCAPTCHA](https://developers.google.com/recaptcha/), Chatbot and KnowledgeBase (KB) services.
+
+Once all the configurations are provided local development can commence or a production package could be built. Built static assets are the ones that should be used on the server.
+
+
+### Install all the required dependencies
+
+Current stable [Node.js](https://nodejs.org/en/) version should work. Currently used version is 12 (14 is also suitable). Please use an older version if you run into issues while installing the dependencies.
+
 ```
 npm install
 ```

@@ -27,7 +27,9 @@ export default class KnowledgeBaseService {
   }
 }
 
+const meta = document.querySelector(
+  'meta[name="kb-url"]'
+) as HTMLMetaElement;
+
 // A singleton instance
-export const knowledgeBaseService = new KnowledgeBaseService(
-  "https://kb.smartzoos.eu"
-);
+export const knowledgeBaseService = new KnowledgeBaseService(meta.content);

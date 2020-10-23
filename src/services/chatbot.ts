@@ -26,5 +26,9 @@ export default class ChatBotService {
   }
 }
 
+const meta = document.querySelector(
+  'meta[name="chatbot-url"]'
+) as HTMLMetaElement;
+
 // A singleton instance
-export const chatBotService = new ChatBotService("http://83.212.93.155:5000");
+export const chatBotService = new ChatBotService(meta.content);
