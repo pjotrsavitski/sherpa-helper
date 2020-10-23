@@ -205,7 +205,23 @@ export default class ConversationItem extends Vue {
     return this.isInEnglish || this.submitInEnglishChoice === "no";
   }
 
+  escapeHtml(value: string): string {
+    // Solution is based on how Prototype.js and Underscore.js are handing it
+    // https://github.com/prototypejs/prototype/blob/d9411e5/src/prototype/lang/string.js#L408
+    // https://github.com/jashkenas/underscore/blob/master/underscore.js#L825
+    return value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#x27;")
+      .replace(/`/g, "&#x60;");
+  }
+
   htmlifyText(value: string): string {
+    // Escape before converting linebrakes and links to HTML
+    value = this.escapeHtml(value);
+
     let processed = value;
     processed = processed.replace(/\\n/g, "<br>");
     processed = processed.replace(urlRegex(), url => {
@@ -345,6 +361,19 @@ export default class ConversationItem extends Vue {
       "congrats": "Grande! Hai altre domande?",
       "buttons": {
         "yes": "Sì",
+        "no": "No"
+      }
+    }
+  },
+  "gr": {
+    "greeting": "Γεια! Πώς μπορώ να βοηθήσω;",
+    "suggestion": {
+      "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
+      "text_for_english": "I’m unable to find an answer to your question. Would you like to suggest this question to my database?",
+      "text_not_for_english": "Would you like to suggest this question to my database?",
+      "congrats": "Ωραία! Έχεις περαιτέρω απορίες;",
+      "buttons": {
+        "yes": "Yes",
         "no": "No"
       }
     }
