@@ -19,9 +19,9 @@
             </li>
           </ul>
 
-          <div @click="onMoreQuestions" class="more-questions mt-4">
+          <!--div @click="onMoreQuestions" class="more-questions mt-4">
             {{ $t("info.see_more_questions") }}
-          </div>
+          </div-->
         </div>
 
         <div class="language-chooser-wrapper">
