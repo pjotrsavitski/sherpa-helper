@@ -260,7 +260,7 @@ export default class ChatBot extends Vue {
   "en": {
     "info": {
       "header": "Hello! I'm the SELFIE CHATBOT. How can I help you?",
-      "popular_questions": "To start with, here are some of the most popular questions:",
+      "popular_questions": "To start with, here are some sample questions:",
       "see_more_questions": "See more common questions"
     },
     "conversation": {
@@ -270,7 +270,7 @@ export default class ChatBot extends Vue {
   "et": {
     "info": {
       "header": "Tere! Olen SELFIE CHATBOT, kuidas saan abiks olla?",
-      "popular_questions": "Siin on mõned populaarsed küsimused:",
+      "popular_questions": "Siin on mõned näidisküsimused:",
       "see_more_questions": "Rohkem küsimusi"
     },
     "conversation": {
@@ -280,7 +280,7 @@ export default class ChatBot extends Vue {
   "fi": {
     "info": {
       "header": "Hei, Olen SELFIE chatbot, kuinka voin auttaa sinua ?",
-      "popular_questions": "Tässä joitakin yleisimpiä kysymyksiä ?",
+      "popular_questions": "Tässä joitakin esimerkkikysymyksiä:",
       "see_more_questions": "Haluatko nähdä lisää yleisiä kysymyksiä ?"
     },
     "conversation": {
@@ -290,7 +290,7 @@ export default class ChatBot extends Vue {
   "it": {
     "info": {
       "header": "Ciao. Sono il Chatbot di SELFIE. Come posso aiutarti?",
-      "popular_questions": "Per cominciare, ecco alcune domande comuni:",
+      "popular_questions": "Per cominciare, ecco alcune domande di esempio:",
       "see_more_questions": "Visualizza altre domande comuni."
     },
     "conversation": {
@@ -300,7 +300,7 @@ export default class ChatBot extends Vue {
   "gr": {
     "info": {
       "header": "Γεια! Είμαι ο SELFIE CHATBOT, πώς μπορώ να βοηθήσω;",
-      "popular_questions": "Ακολουθούν μερικές δημοφιλείς ερωτήσεις για να ξεκινήσεις:",
+      "popular_questions": "To start with, here are some sample questions:",
       "see_more_questions": "Δες περισσότερες κοινές ερωτήσεις"
     },
     "conversation": {
