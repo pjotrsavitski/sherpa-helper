@@ -77,6 +77,7 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 import { chatBotService } from "../services/chatbot";
+import { knowledgeBaseService } from "../services/kb";
 import ConversationItem from "./ConversationItem.vue";
 import LanguageChooser from "./LanguageChooser.vue";
 
@@ -158,16 +159,25 @@ export default class ChatBot extends Vue {
 
     this.addToConversation("user", question);
 
+    const languageCode = this.$i18n.locale;
+
     return chatBotService
-      .getAnswer(question, this.$i18n.locale)
+      .getAnswer(question, languageCode)
       .then(response => {
+        let chatbotAnswer = "";
         this.loading = false;
 
         if (response.data && response.data.length > 0) {
-          this.addToConversation("chatbot", response.data[0]);
+          chatbotAnswer = response.data[0];
+        }
+
+        if (chatbotAnswer) {
+          this.addToConversation("chatbot", chatbotAnswer);
         } else {
           this.addToConversation("suggestion", question);
         }
+
+        knowledgeBaseService.logActivity(question, chatbotAnswer, languageCode);
       })
       .catch(error => {
         this.loading = false;

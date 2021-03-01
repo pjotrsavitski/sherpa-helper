@@ -25,6 +25,23 @@ export default class KnowledgeBaseService {
       }
     );
   }
+
+  logActivity(question: string, answer: string, languageCode: string) {
+    return this.http.post(
+      "/api/helper_activity",
+      {
+        question: question,
+        answer: answer,
+        languageCode: languageCode
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache"
+        }
+      }
+    );
+  }
 }
 
 const meta = document.querySelector(
