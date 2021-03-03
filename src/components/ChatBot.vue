@@ -63,6 +63,14 @@
                     >
                       <i class="fas fa-paper-plane fa-lg"></i>
                     </b-button>
+                    <b-button
+                      variant="outline-secondary"
+                      type="button"
+                      v-bind:disabled="!canClear"
+                      @click="onClearConversation()"
+                    >
+                      <i class="fas fa-eraser fa-lg"></i>
+                    </b-button>
                   </b-input-group-append>
                 </b-input-group>
               </b-form>
@@ -125,6 +133,10 @@ export default class ChatBot extends Vue {
 
   private get questionElement(): HTMLElement {
     return this.$refs.question as HTMLElement;
+  }
+
+  public get canClear(): boolean {
+    return this.conversation.length > 1 && !this.loading;
   }
 
   private addToConversation(type: string, text: string): void {
@@ -208,6 +220,10 @@ export default class ChatBot extends Vue {
         block: "end"
       });
     });
+  }
+
+  onClearConversation(): void {
+    this.$store.dispatch("clearConversation");
   }
 }
 </script>

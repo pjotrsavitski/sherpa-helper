@@ -24,6 +24,9 @@ export default new Vuex.Store({
     },
     setPopularQuestions(state, questions: Array<string>) {
       state.popularQuestions = questions;
+    },
+    clearConversation(state) {
+      state.conversation.splice(1);
     }
   },
   actions: {
@@ -35,6 +38,9 @@ export default new Vuex.Store({
     },
     setPopularQuestions(context, questions: Array<string>) {
       context.commit("setPopularQuestions", questions);
+    },
+    clearConversation(context) {
+      context.commit("clearConversation");
     }
   },
   modules: {}
