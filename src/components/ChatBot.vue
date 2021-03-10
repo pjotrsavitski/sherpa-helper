@@ -114,11 +114,9 @@ export default class ChatBot extends Vue {
   mounted() {
     // TODO Those should be loaded from an API
     this.$store.dispatch("setPopularQuestions", [
-      "How do I register for SELFIE?",
-      "How do I login?",
-      "How do I navigate within SELFIE?",
-      "How do I set SELFIE up for my school?",
-      "How do I choose who will take part in SELFIE?"
+      "What is a school profile?",
+      "Who can participate in Selfie?",
+      "How can I start using Selfie?"
     ]);
     this.addToConversation("greeting");
   }
