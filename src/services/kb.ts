@@ -42,11 +42,32 @@ export default class KnowledgeBaseService {
       }
     );
   }
+
+  submitResponeRating(
+    question: string,
+    answer: string,
+    languageCode: string,
+    rating: number
+  ) {
+    return this.http.post(
+      "/api/helper_response_user_ratings",
+      {
+        question: question,
+        answer: answer,
+        languageCode: languageCode,
+        rating: rating
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "Cache-Control": "no-cache"
+        }
+      }
+    );
+  }
 }
 
-const meta = document.querySelector(
-  'meta[name="kb-url"]'
-) as HTMLMetaElement;
+const meta = document.querySelector('meta[name="kb-url"]') as HTMLMetaElement;
 
 // A singleton instance
 export const knowledgeBaseService = new KnowledgeBaseService(meta.content);

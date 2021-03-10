@@ -23,6 +23,10 @@
         v-html="htmlifyText(item.text)"
         v-if="!(isSuggestion() || isGreeting())"
       ></span>
+      <response-rating
+        :item="item"
+        v-if="isChatbotResponse()"
+      ></response-rating>
       <div v-if="isSuggestion()">
         <div v-if="!isInEnglish">
           <span class="text">
@@ -109,8 +113,13 @@ import urlRegex from "url-regex";
 import { ConversationEntry } from "../store";
 import { knowledgeBaseService } from "../services/kb";
 import { recaptchaService } from "../services/recaptcha";
+import ResponseRating from "./ResponseRating.vue";
 
-@Component
+@Component({
+  components: {
+    ResponseRating
+  }
+})
 export default class ConversationItem extends Vue {
   loading = false;
   submitSuggestionChoice = "";
@@ -203,6 +212,10 @@ export default class ConversationItem extends Vue {
 
   showSuggestQuestion(): boolean {
     return this.isInEnglish || this.submitInEnglishChoice === "no";
+  }
+
+  isChatbotResponse(): boolean {
+    return this.item.type === "chatbot";
   }
 
   escapeHtml(value: string): string {

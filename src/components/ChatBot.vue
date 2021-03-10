@@ -120,7 +120,7 @@ export default class ChatBot extends Vue {
       "How do I set SELFIE up for my school?",
       "How do I choose who will take part in SELFIE?"
     ]);
-    this.addToConversation("greeting", "");
+    this.addToConversation("greeting");
   }
 
   public get conversation(): Array<{ type: string; text: string }>[] {
@@ -139,12 +139,17 @@ export default class ChatBot extends Vue {
     return this.conversation.length > 1 && !this.loading;
   }
 
-  private addToConversation(type: string, text: string): void {
+  private addToConversation(
+    type: string,
+    text?: string,
+    userInput?: string
+  ): void {
     this.$store.dispatch("addToConversation", {
       type: type,
       text: text,
       timestamp: new Date(),
-      locale: this.$i18n.locale
+      locale: this.$i18n.locale,
+      userInput: userInput
     });
   }
 
@@ -184,7 +189,7 @@ export default class ChatBot extends Vue {
         }
 
         if (chatbotAnswer) {
-          this.addToConversation("chatbot", chatbotAnswer);
+          this.addToConversation("chatbot", chatbotAnswer, question);
         } else {
           this.addToConversation("suggestion", question);
         }
