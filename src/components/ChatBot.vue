@@ -24,12 +24,12 @@
           </div-->
         </div>
 
-        <div class="language-chooser-wrapper">
+        <div class="d-flex flex-row-reverse mb">
           <language-chooser :locales="locales"></language-chooser>
         </div>
       </div>
       <div class="col-sm chat px-0">
-        <div class="conversation p-2 px-4 mt-4">
+        <div class="conversation p-2 px-4 mt-4" ref="conversation">
           <conversation-item
             v-for="(item, index) in conversation"
             v-bind:key="index"
@@ -133,6 +133,10 @@ export default class ChatBot extends Vue {
     return this.$refs.question as HTMLElement;
   }
 
+  private get conversationElement(): HTMLElement {
+    return this.$refs.conversation as HTMLElement;
+  }
+
   public get canClear(): boolean {
     return this.conversation.length > 1 && !this.loading;
   }
@@ -218,6 +222,15 @@ export default class ChatBot extends Vue {
 
   scrollQuestionElementIntoView(): void {
     Vue.nextTick(() => {
+      const conversationStyle = getComputedStyle(this.conversationElement);
+
+      if (conversationStyle.getPropertyValue("overflow-y") === "auto") {
+        this.conversationElement.scroll({
+          top: this.conversationElement.scrollHeight,
+          behavior: "smooth"
+        });
+      }
+
       this.questionElement.scrollIntoView({
         behavior: "smooth",
         block: "end"
@@ -262,12 +275,6 @@ export default class ChatBot extends Vue {
       text-decoration: underline;
       cursor: pointer;
     }
-
-    .language-chooser-wrapper {
-      position: absolute;
-      bottom: 0.5em;
-      right: 0.5em;
-    }
   }
 
   .chat {
@@ -279,6 +286,19 @@ export default class ChatBot extends Vue {
 
     .container.question {
       bottom: 1em;
+    }
+  }
+}
+
+@media (min-width: 992px) {
+  .container.main {
+    > .row {
+      > .chat {
+        > .conversation {
+          overflow-y: auto;
+          max-height: 60vh;
+        }
+      }
     }
   }
 }
