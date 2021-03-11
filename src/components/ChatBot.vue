@@ -178,6 +178,8 @@ export default class ChatBot extends Vue {
 
     this.addToConversation("user", question);
 
+    this.scrollQuestionElementIntoView();
+
     const languageCode = this.$i18n.locale;
 
     return chatBotService
@@ -224,6 +226,8 @@ export default class ChatBot extends Vue {
     Vue.nextTick(() => {
       const conversationStyle = getComputedStyle(this.conversationElement);
 
+      // This one does not check if scrolling is really required
+      // It might make sense to do that not to trigger scrolling when it is not required
       if (conversationStyle.getPropertyValue("overflow-y") === "auto") {
         this.conversationElement.scroll({
           top: this.conversationElement.scrollHeight,
