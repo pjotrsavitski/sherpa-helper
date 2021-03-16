@@ -4,8 +4,8 @@
       <b-button
         v-for="(option, index) in ratingOptions"
         v-bind:key="index"
-        :variant="ratingButtonVariant(option.rating)"
-        @click="onSubmitRating(option.rating)"
+        :variant="ratingButtonVariant(option)"
+        @click="onSubmitRating(option)"
         :disabled="loading || responseRated"
       >
         <i :class="option.iconClass"></i>
@@ -28,20 +28,29 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import { ConversationEntry } from "../store";
 import { knowledgeBaseService } from "../services/kb";
 
+interface RatingOption {
+  value: number;
+  iconClass: string;
+  buttonVariant: string;
+}
+
 @Component
-export default class ResponeRating extends Vue {
-  ratingOptions = [
+export default class ResponseRating extends Vue {
+  ratingOptions: Array<RatingOption> = [
     {
-      rating: 1,
-      iconClass: "far fa-smile"
+      value: 1,
+      iconClass: "far fa-frown",
+      buttonVariant: "danger"
     },
     {
-      rating: 2,
-      iconClass: "far fa-meh"
+      value: 2,
+      iconClass: "far fa-meh",
+      buttonVariant: "secondary"
     },
     {
-      rating: 3,
-      iconClass: "far fa-frown"
+      value: 3,
+      iconClass: "far fa-smile",
+      buttonVariant: "success"
     }
   ];
   loading = false;
@@ -51,12 +60,14 @@ export default class ResponeRating extends Vue {
   @Prop({ required: true })
   item!: ConversationEntry;
 
-  ratingButtonVariant(rating: number): string {
-    return this.rating === rating ? "secondary" : "outline-secondary";
+  ratingButtonVariant(option: RatingOption): string {
+    return this.rating === option.value
+      ? option.buttonVariant
+      : `outline-${option.buttonVariant}`;
   }
 
-  onSubmitRating(rating: number): void {
-    this.rating = rating;
+  onSubmitRating(option: RatingOption): void {
+    this.rating = option.value;
     this.loading = true;
 
     knowledgeBaseService
@@ -64,7 +75,7 @@ export default class ResponeRating extends Vue {
         this.item.userInput,
         this.item.text,
         this.item.locale,
-        rating
+        option.value
       )
       .then(() => {
         this.responseRated = true;
