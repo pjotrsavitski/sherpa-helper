@@ -39,8 +39,8 @@ export default class ResponseRating extends Vue {
   ratingOptions: Array<RatingOption> = [
     {
       value: 1,
-      iconClass: "far fa-frown",
-      buttonVariant: "danger"
+      iconClass: "far fa-frown text-danger",
+      buttonVariant: "secondary"
     },
     {
       value: 2,
@@ -49,8 +49,8 @@ export default class ResponseRating extends Vue {
     },
     {
       value: 3,
-      iconClass: "far fa-smile",
-      buttonVariant: "success"
+      iconClass: "far fa-smile text-success",
+      buttonVariant: "secondary"
     }
   ];
   loading = false;
