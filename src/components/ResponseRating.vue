@@ -94,3 +94,13 @@ export default class ResponseRating extends Vue {
   }
 }
 </script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+button.btn.btn-outline-secondary {
+  &:hover,
+  &:active {
+    background-color: #d2d5d8;
+  }
+}
+</style>
