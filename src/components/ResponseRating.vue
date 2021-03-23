@@ -103,4 +103,10 @@ button.btn.btn-outline-secondary {
     background-color: #d2d5d8;
   }
 }
+
+button.btn.btn-secondary {
+  &.disabled {
+    background-color: #d2d5d8;
+  }
+}
 </style>
