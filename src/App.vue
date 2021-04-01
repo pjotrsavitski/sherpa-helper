@@ -34,6 +34,9 @@ export default class App extends Vue {
   locales = ["en", "et", "fi", "gr", "it"];
 
   created() {
+    // XXX This is a temporary measure to keep English as language
+    this.$root.$i18n.locale = "en";
+    /*
     let localeSet = false;
     try {
       if (window.localStorage.currentLocale) {
@@ -67,6 +70,7 @@ export default class App extends Vue {
         window.console.error(e);
       }
     });
+    */
   }
 }
 </script>
