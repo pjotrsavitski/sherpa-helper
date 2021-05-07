@@ -6,7 +6,6 @@
     variant="outline-light"
     class="m-2"
     size="lg"
-    :disabled="true"
   >
     <b-dropdown-item
       v-for="locale in locales"
