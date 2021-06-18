@@ -355,12 +355,12 @@ export default class ConversationItem extends Vue {
   "fi": {
     "greeting": "Hei! Kuinka voin auttaa ?",
     "suggestion": {
-      "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
+      "ask_in_english": "En löydä vastausta kysymykseesi. Haluatko tehdä saman kysymyksen uudelleen, mutta englanniksi?",
       "text_for_english": "En valitettavasti löydä vastausta kysymykseesi. Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
       "text_not_for_english": "Haluatko että tämä kysymys siirretään tietokantaani vastattavaksi ?",
       "congrats": "Hienoa!, Onko sinulla lisää kysymyksiä ?",
       "buttons": {
-        "yes": "Joo",
+        "yes": "Kyllä",
         "no": "Ei"
       }
     }

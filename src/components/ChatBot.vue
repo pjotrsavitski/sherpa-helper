@@ -334,7 +334,7 @@ export default class ChatBot extends Vue {
     "info": {
       "header": "Hei, Olen SELFIE chatbot, kuinka voin auttaa sinua ?",
       "popular_questions": "Tässä joitakin esimerkkikysymyksiä:",
-      "see_more_questions": "Haluatko nähdä lisää yleisiä kysymyksiä ?"
+      "see_more_questions": "Haluatko nähdä lisää yleisimpiä kysymyksiä?"
     },
     "conversation": {
       "question_placeholder": "Kirjoita kysymyksesi tähän"
