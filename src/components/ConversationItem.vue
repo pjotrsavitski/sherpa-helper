@@ -369,9 +369,9 @@ export default class ConversationItem extends Vue {
     "greeting": "Ciao! Come posso aiutarti?",
     "suggestion": {
       "ask_in_english": "There is no answer defined for your question! Would you like to submit your question again in English?",
-      "text_for_english": "Non trovo una risposta alla tua domanda. Vuoi che questa domanda venga sottoposta alla mia banca dati?",
-      "text_not_for_english": "Vuoi che questa domanda venga sottoposta alla mia banca dati?",
-      "congrats": "Grande! Hai altre domande?",
+      "text_for_english": "Non trovo una risposta alla tua domanda. Vuoi che questa domanda venga inoltrata alla mia banca dati?",
+      "text_not_for_english": "Vuoi che questa domanda venga inoltrata alla mia banca dati?",
+      "congrats": "Ottimo! Hai altre domande?",
       "buttons": {
         "yes": "Sì",
         "no": "No"

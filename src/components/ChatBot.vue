@@ -347,7 +347,7 @@ export default class ChatBot extends Vue {
       "see_more_questions": "Visualizza altre domande comuni."
     },
     "conversation": {
-      "question_placeholder": "Inserire qui la tua domanda."
+      "question_placeholder": "Inserisci qui la tua domanda"
     }
   },
   "gr": {
